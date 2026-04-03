@@ -29,6 +29,25 @@ const TIMING = {
     PANZOOM_RESET_DELAY: 10 // 10ms
 };
 
+// Detect if running on GitHub Pages and adjust base path
+function getBasePath() {
+    const hostname = window.location.hostname;
+    const pathname = window.location.pathname;
+    
+    // Check if on GitHub Pages
+    if (hostname.includes('github.io')) {
+        // Extract repo name from pathname
+        // pathname will be like /Claude-Code-Architecture-Decoded/ or /Claude-Code-Architecture-Decoded/Web/
+        const parts = pathname.split('/').filter(p => p);
+        if (parts.length > 0 && parts[0]) {
+            return `/${parts[0]}/`;
+        }
+    }
+    
+    // Local or custom domain - use relative paths
+    return '../';
+}
+
 // Initialize application
 document.addEventListener('DOMContentLoaded', () => {
     initSidebar();
@@ -426,9 +445,21 @@ async function loadContent(chapterId) {
     document.title = `${chapter.title} - Architecture Decoded`;
     
     try {
+        // Get the correct base path for the environment
+        const basePath = getBasePath();
+        
+        // Construct the full path
+        let fullPath;
+        if (chapter.path.startsWith('../')) {
+            // Remove the ../ and prepend basePath
+            fullPath = basePath + chapter.path.substring(3);
+        } else {
+            fullPath = basePath + chapter.path;
+        }
+        
         // Force fresh fetch with cache-busting
         const cacheBuster = `?_t=${Date.now()}`;
-        const response = await fetch(chapter.path + cacheBuster, {
+        const response = await fetch(fullPath + cacheBuster, {
             cache: 'no-store',
             headers: {
                 'Cache-Control': 'no-cache, no-store, must-revalidate',
@@ -437,7 +468,7 @@ async function loadContent(chapterId) {
             }
         });
         if (!response.ok) {
-            throw new Error(`HTTP Error ${response.status}: Failed to load file`);
+            throw new Error(`HTTP Error ${response.status}: Failed to load file from ${fullPath}`);
         }
         const markdown = await response.text();
         
@@ -451,7 +482,7 @@ async function loadContent(chapterId) {
         
         // Post-process the DOM
         processDomLinks(contentDiv);
-        processDomImages(contentDiv);
+        processDomImages(contentDiv, basePath);
         await processCodeBlocks(contentDiv);
         
         // Update nav buttons
@@ -498,18 +529,21 @@ function processDomLinks(container) {
     });
 }
 
-function processDomImages(container) {
+function processDomImages(container, basePath) {
     container.querySelectorAll('img').forEach(img => {
         let src = img.getAttribute('src');
         if (!src) return;
         
         if (!src.startsWith('http') && !src.startsWith('data:')) {
-            // Fix relative paths (knowing we are in /Web/ folder)
+            // Fix relative paths based on environment
             if (src.startsWith('./')) {
-                img.setAttribute('src', '../' + src.substring(2));
-            } else if (!src.startsWith('../')) {
-                img.setAttribute('src', '../' + src);
+                src = src.substring(2);
+            } else if (src.startsWith('../')) {
+                src = src.substring(3);
             }
+            
+            // Use basePath for GitHub Pages or relative for local
+            img.setAttribute('src', basePath + src);
         }
         
         // Wrap image and add fullscreen button
