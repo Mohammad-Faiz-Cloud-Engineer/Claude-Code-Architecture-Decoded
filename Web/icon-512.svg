@@ -1,4 +1,36 @@
-<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
-  <rect width="512" height="512" fill="#C08670"/>
-  <text x="256" y="300" font-family="Arial, sans-serif" font-size="200" font-weight="bold" fill="white" text-anchor="middle">AD</text>
+<svg width="512" height="522" viewBox="0 0 512 522" xmlns="http://www.w3.org/2000/svg">
+<!-- Background -->
+<rect width="512" height="512" rx="80" fill="#F5F4EF"/>
+<!-- Single ring halo -->
+<circle cx="256" cy="210" r="172" fill="none" stroke="#C08670" stroke-width="1.2" opacity="0.25"/>
+<!-- Icon mark: centered at (256, 210) -->
+<g transform="translate(256,210)">
+<!-- Diagonal accent rays (45,135,225,315) — outline -->
+<rect transform="rotate(45)" x="-6.5" y="-150" width="13" height="92" rx="6.5" fill="none" stroke="#8B6F5C" stroke-width="2" opacity="0.5"/>
+<rect transform="rotate(135)" x="-6.5" y="-150" width="13" height="92" rx="6.5" fill="none" stroke="#8B6F5C" stroke-width="2" opacity="0.5"/>
+<rect transform="rotate(225)" x="-6.5" y="-150" width="13" height="92" rx="6.5" fill="none" stroke="#8B6F5C" stroke-width="2" opacity="0.5"/>
+<rect transform="rotate(315)" x="-6.5" y="-150" width="13" height="92" rx="6.5" fill="none" stroke="#8B6F5C" stroke-width="2" opacity="0.5"/>
+<!-- Cardinal main rays (0,90,180,270) — filled -->
+<rect transform="rotate(0)" x="-6.5" y="-150" width="13" height="92" rx="6.5" fill="#C08670"/>
+<rect transform="rotate(90)" x="-6.5" y="-150" width="13" height="92" rx="6.5" fill="#C08670"/>
+<rect transform="rotate(180)" x="-6.5" y="-150" width="13" height="92" rx="6.5" fill="#C08670"/>
+<rect transform="rotate(270)" x="-6.5" y="-150" width="13" height="92" rx="6.5" fill="#C08670"/>
+<!-- Accent half-filled rays at 22.5° offsets -->
+<rect transform="rotate(22.5)" x="-5" y="-150" width="10" height="68" rx="5" fill="#C08670" opacity="0.65"/>
+<rect transform="rotate(67.5)" x="-5" y="-150" width="10" height="68" rx="5" fill="#C08670" opacity="0.65"/>
+<rect transform="rotate(112.5)" x="-5" y="-150" width="10" height="68" rx="5" fill="#C08670" opacity="0.65"/>
+<rect transform="rotate(157.5)" x="-5" y="-150" width="10" height="68" rx="5" fill="#C08670" opacity="0.65"/>
+<rect transform="rotate(202.5)" x="-5" y="-150" width="10" height="68" rx="5" fill="#C08670" opacity="0.65"/>
+<rect transform="rotate(247.5)" x="-5" y="-150" width="10" height="68" rx="5" fill="#C08670" opacity="0.65"/>
+<rect transform="rotate(292.5)" x="-5" y="-150" width="10" height="68" rx="5" fill="#C08670" opacity="0.65"/>
+<rect transform="rotate(337.5)" x="-5" y="-150" width="10" height="68" rx="5" fill="#C08670" opacity="0.65"/>
+<!-- Center disc -->
+<circle r="36" fill="#C08670"/>
+<circle r="20" fill="#F5F4EF"/>
+<circle r="6" fill="#C08670" opacity="0.85"/>
+</g>
+<!-- Architecture Decoded -->
+<text x="256" y="412" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="21" font-weight="600" letter-spacing="4" fill="#5E5E5E">ARCHITECTURE DECODED</text>
+<!-- Claude Code Deep Dive -->
+<text x="256" y="443" text-anchor="middle" font-family="'Courier New', Courier, monospace" font-size="12" font-weight="500" letter-spacing="2.5" fill="#C08670">CLAUDE CODE · DEEP DIVE</text>
 </svg>
