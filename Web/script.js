@@ -1,24 +1,28 @@
 // Architecture Decoded - Content Structure
+// Detect if running on GitHub Pages and adjust paths accordingly
+const isGitHubPages = window.location.hostname.includes('github.io');
+const basePath = isGitHubPages ? '/Claude-Code-Architecture-Decoded' : '..';
+
 const structure = [
-    { id: 'readme', path: '../README.md', title: 'Introduction', group: 'Overview' },
-    { id: 'ch01-architecture', path: '../book/ch01-architecture.md', title: 'The Architecture of an AI Agent', group: 'Part I: Foundations' },
-    { id: 'ch02-bootstrap', path: '../book/ch02-bootstrap.md', title: 'Starting Fast — The Bootstrap Pipeline', group: 'Part I: Foundations' },
-    { id: 'ch03-state', path: '../book/ch03-state.md', title: 'State — The Two-Tier Architecture', group: 'Part I: Foundations' },
-    { id: 'ch04-api-layer', path: '../book/ch04-api-layer.md', title: 'Talking to Claude — The API Layer', group: 'Part I: Foundations' },
-    { id: 'ch05-agent-loop', path: '../book/ch05-agent-loop.md', title: 'The Agent Loop', group: 'Part II: The Core Loop' },
-    { id: 'ch06-tools', path: '../book/ch06-tools.md', title: 'Tools — From Definition to Execution', group: 'Part II: The Core Loop' },
-    { id: 'ch07-concurrency', path: '../book/ch07-concurrency.md', title: 'Concurrent Tool Execution', group: 'Part II: The Core Loop' },
-    { id: 'ch08-sub-agents', path: '../book/ch08-sub-agents.md', title: 'Spawning Sub-Agents', group: 'Part III: Multi-Agent Orchestration' },
-    { id: 'ch09-fork-agents', path: '../book/ch09-fork-agents.md', title: 'Fork Agents and the Prompt Cache', group: 'Part III: Multi-Agent Orchestration' },
-    { id: 'ch10-coordination', path: '../book/ch10-coordination.md', title: 'Tasks, Coordination, and Swarms', group: 'Part III: Multi-Agent Orchestration' },
-    { id: 'ch11-memory', path: '../book/ch11-memory.md', title: 'Memory — Learning Across Conversations', group: 'Part IV: Persistence and Intelligence' },
-    { id: 'ch12-extensibility', path: '../book/ch12-extensibility.md', title: 'Extensibility — Skills and Hooks', group: 'Part IV: Persistence and Intelligence' },
-    { id: 'ch13-terminal-ui', path: '../book/ch13-terminal-ui.md', title: 'The Terminal UI', group: 'Part V: The Interface' },
-    { id: 'ch14-input-interaction', path: '../book/ch14-input-interaction.md', title: 'Input and Interaction', group: 'Part V: The Interface' },
-    { id: 'ch15-mcp', path: '../book/ch15-mcp.md', title: 'MCP — The Universal Tool Protocol', group: 'Part VI: Connectivity' },
-    { id: 'ch16-remote', path: '../book/ch16-remote.md', title: 'Remote Control and Cloud Execution', group: 'Part VI: Connectivity' },
-    { id: 'ch17-performance', path: '../book/ch17-performance.md', title: 'Performance', group: 'Part VII: Performance Engineering' },
-    { id: 'ch18-epilogue', path: '../book/ch18-epilogue.md', title: 'Epilogue — What We Learned', group: 'Part VII: Performance Engineering' }
+    { id: 'readme', path: `${basePath}/README.md`, title: 'Introduction', group: 'Overview' },
+    { id: 'ch01-architecture', path: `${basePath}/book/ch01-architecture.md`, title: 'The Architecture of an AI Agent', group: 'Part I: Foundations' },
+    { id: 'ch02-bootstrap', path: `${basePath}/book/ch02-bootstrap.md`, title: 'Starting Fast — The Bootstrap Pipeline', group: 'Part I: Foundations' },
+    { id: 'ch03-state', path: `${basePath}/book/ch03-state.md`, title: 'State — The Two-Tier Architecture', group: 'Part I: Foundations' },
+    { id: 'ch04-api-layer', path: `${basePath}/book/ch04-api-layer.md`, title: 'Talking to Claude — The API Layer', group: 'Part I: Foundations' },
+    { id: 'ch05-agent-loop', path: `${basePath}/book/ch05-agent-loop.md`, title: 'The Agent Loop', group: 'Part II: The Core Loop' },
+    { id: 'ch06-tools', path: `${basePath}/book/ch06-tools.md`, title: 'Tools — From Definition to Execution', group: 'Part II: The Core Loop' },
+    { id: 'ch07-concurrency', path: `${basePath}/book/ch07-concurrency.md`, title: 'Concurrent Tool Execution', group: 'Part II: The Core Loop' },
+    { id: 'ch08-sub-agents', path: `${basePath}/book/ch08-sub-agents.md`, title: 'Spawning Sub-Agents', group: 'Part III: Multi-Agent Orchestration' },
+    { id: 'ch09-fork-agents', path: `${basePath}/book/ch09-fork-agents.md`, title: 'Fork Agents and the Prompt Cache', group: 'Part III: Multi-Agent Orchestration' },
+    { id: 'ch10-coordination', path: `${basePath}/book/ch10-coordination.md`, title: 'Tasks, Coordination, and Swarms', group: 'Part III: Multi-Agent Orchestration' },
+    { id: 'ch11-memory', path: `${basePath}/book/ch11-memory.md`, title: 'Memory — Learning Across Conversations', group: 'Part IV: Persistence and Intelligence' },
+    { id: 'ch12-extensibility', path: `${basePath}/book/ch12-extensibility.md`, title: 'Extensibility — Skills and Hooks', group: 'Part IV: Persistence and Intelligence' },
+    { id: 'ch13-terminal-ui', path: `${basePath}/book/ch13-terminal-ui.md`, title: 'The Terminal UI', group: 'Part V: The Interface' },
+    { id: 'ch14-input-interaction', path: `${basePath}/book/ch14-input-interaction.md`, title: 'Input and Interaction', group: 'Part V: The Interface' },
+    { id: 'ch15-mcp', path: `${basePath}/book/ch15-mcp.md`, title: 'MCP — The Universal Tool Protocol', group: 'Part VI: Connectivity' },
+    { id: 'ch16-remote', path: `${basePath}/book/ch16-remote.md`, title: 'Remote Control and Cloud Execution', group: 'Part VI: Connectivity' },
+    { id: 'ch17-performance', path: `${basePath}/book/ch17-performance.md`, title: 'Performance', group: 'Part VII: Performance Engineering' },
+    { id: 'ch18-epilogue', path: `${basePath}/book/ch18-epilogue.md`, title: 'Epilogue — What We Learned', group: 'Part VII: Performance Engineering' }
 ];
 
 // Constants
@@ -28,25 +32,6 @@ const TIMING = {
     COPY_SUCCESS_DISPLAY: 2000, // 2 seconds
     PANZOOM_RESET_DELAY: 10 // 10ms
 };
-
-// Detect if running on GitHub Pages and adjust base path
-function getBasePath() {
-    const hostname = window.location.hostname;
-    const pathname = window.location.pathname;
-    
-    // Check if on GitHub Pages
-    if (hostname.includes('github.io')) {
-        // Extract repo name from pathname
-        // pathname will be like /Claude-Code-Architecture-Decoded/ or /Claude-Code-Architecture-Decoded/Web/
-        const parts = pathname.split('/').filter(p => p);
-        if (parts.length > 0 && parts[0]) {
-            return `/${parts[0]}/`;
-        }
-    }
-    
-    // Local or custom domain - use relative paths
-    return '../';
-}
 
 // Initialize application
 document.addEventListener('DOMContentLoaded', () => {
@@ -445,21 +430,9 @@ async function loadContent(chapterId) {
     document.title = `${chapter.title} - Architecture Decoded`;
     
     try {
-        // Get the correct base path for the environment
-        const basePath = getBasePath();
-        
-        // Construct the full path
-        let fullPath;
-        if (chapter.path.startsWith('../')) {
-            // Remove the ../ and prepend basePath
-            fullPath = basePath + chapter.path.substring(3);
-        } else {
-            fullPath = basePath + chapter.path;
-        }
-        
         // Force fresh fetch with cache-busting
         const cacheBuster = `?_t=${Date.now()}`;
-        const response = await fetch(fullPath + cacheBuster, {
+        const response = await fetch(chapter.path + cacheBuster, {
             cache: 'no-store',
             headers: {
                 'Cache-Control': 'no-cache, no-store, must-revalidate',
@@ -468,7 +441,7 @@ async function loadContent(chapterId) {
             }
         });
         if (!response.ok) {
-            throw new Error(`HTTP Error ${response.status}: Failed to load file from ${fullPath}`);
+            throw new Error(`HTTP Error ${response.status}: Failed to load file`);
         }
         const markdown = await response.text();
         
@@ -482,7 +455,7 @@ async function loadContent(chapterId) {
         
         // Post-process the DOM
         processDomLinks(contentDiv);
-        processDomImages(contentDiv, basePath);
+        processDomImages(contentDiv);
         await processCodeBlocks(contentDiv);
         
         // Update nav buttons
@@ -529,21 +502,28 @@ function processDomLinks(container) {
     });
 }
 
-function processDomImages(container, basePath) {
+function processDomImages(container) {
     container.querySelectorAll('img').forEach(img => {
         let src = img.getAttribute('src');
         if (!src) return;
         
         if (!src.startsWith('http') && !src.startsWith('data:')) {
-            // Fix relative paths based on environment
-            if (src.startsWith('./')) {
-                src = src.substring(2);
-            } else if (src.startsWith('../')) {
-                src = src.substring(3);
+            // Fix relative paths for GitHub Pages or local
+            if (isGitHubPages) {
+                // On GitHub Pages, adjust paths to include repo name
+                if (src.startsWith('./')) {
+                    img.setAttribute('src', `${basePath}/${src.substring(2)}`);
+                } else if (!src.startsWith('/')) {
+                    img.setAttribute('src', `${basePath}/${src}`);
+                }
+            } else {
+                // Local development - use relative paths
+                if (src.startsWith('./')) {
+                    img.setAttribute('src', '../' + src.substring(2));
+                } else if (!src.startsWith('../')) {
+                    img.setAttribute('src', '../' + src);
+                }
             }
-            
-            // Use basePath for GitHub Pages or relative for local
-            img.setAttribute('src', basePath + src);
         }
         
         // Wrap image and add fullscreen button
