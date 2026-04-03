@@ -26,6 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initSidebar();
     initMobileMenu();
     initThemeDetector();
+    initZoomModal();
     
     // Handle initial route
     handleRoute();
@@ -92,6 +93,60 @@ function initThemeDetector() {
         // Just reload current view to re-render mermaid with correct theme
         handleRoute();
     });
+}
+
+let panzoomInstance = null;
+
+function initZoomModal() {
+    const closeBtn = document.getElementById('close-zoom-modal');
+    const elem = document.getElementById('zoom-content-wrapper');
+    const zoomIn = document.getElementById('zoom-in');
+    const zoomOut = document.getElementById('zoom-out');
+    const zoomReset = document.getElementById('zoom-reset');
+    
+    if (typeof Panzoom !== 'undefined' && elem) {
+        panzoomInstance = Panzoom(elem, {
+            maxScale: 5,
+            canvas: true
+        });
+        
+        elem.parentElement.addEventListener('wheel', panzoomInstance.zoomWithWheel);
+        
+        zoomIn.addEventListener('click', () => panzoomInstance.zoomIn());
+        zoomOut.addEventListener('click', () => panzoomInstance.zoomOut());
+        zoomReset.addEventListener('click', () => panzoomInstance.reset());
+        
+        closeBtn.addEventListener('click', closeZoomModal);
+        
+        elem.addEventListener('dblclick', () => panzoomInstance.reset());
+    }
+}
+
+function openZoomModal(elementToClone) {
+    const modal = document.getElementById('zoom-modal');
+    const content = document.getElementById('zoom-content');
+    
+    content.innerHTML = '';
+    const clone = elementToClone.cloneNode(true);
+    
+    if (clone.tagName.toLowerCase() === 'svg') {
+        clone.style.maxWidth = '100%';
+        clone.style.height = 'auto';
+    }
+    
+    content.appendChild(clone);
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+    
+    if (panzoomInstance) {
+        setTimeout(() => panzoomInstance.reset(), 10);
+    }
+}
+
+function closeZoomModal() {
+    const modal = document.getElementById('zoom-modal');
+    modal.classList.add('hidden');
+    document.body.style.overflow = '';
 }
 
 function handleRoute() {
@@ -226,6 +281,18 @@ function processDomImages(container) {
                 img.setAttribute('src', '../' + src);
             }
         }
+        
+        // Wrap image and add fullscreen button
+        const wrapper = document.createElement('div');
+        wrapper.className = 'media-wrapper';
+        img.parentNode.insertBefore(wrapper, img);
+        wrapper.appendChild(img);
+        
+        const btn = document.createElement('button');
+        btn.className = 'fullscreen-btn';
+        btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg> Expand`;
+        btn.onclick = () => openZoomModal(img);
+        wrapper.appendChild(btn);
     });
 }
 
@@ -264,6 +331,20 @@ async function processCodeBlocks(container) {
         // Render all mermaid elements
         try {
             await mermaid.run({ querySelector: '.mermaid' });
+            
+            // Add fullscreen buttons after rendering completes
+            document.querySelectorAll('.mermaid').forEach(el => {
+                const btn = document.createElement('button');
+                btn.className = 'fullscreen-btn';
+                btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg> Expand`;
+                
+                // Clicking expand extracts the SVG child
+                btn.onclick = () => {
+                    const svg = el.querySelector('svg');
+                    if(svg) openZoomModal(svg);
+                };
+                el.appendChild(btn);
+            });
         } catch (e) {
             console.error('Mermaid render error:', e);
             // Show raw mermaid code if render fails
