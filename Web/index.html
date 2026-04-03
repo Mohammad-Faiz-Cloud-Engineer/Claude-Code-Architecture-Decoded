@@ -2,14 +2,31 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="description" content="Deep dive into Claude Code: Patterns, internals & design principles of Anthropic's AI coding agent">
+    <meta name="theme-color" content="#C08670">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Architecture Decoded">
+    <meta name="mobile-web-app-capable" content="yes">
     <title>Claude Code Architecture Decoded</title>
+    
+    <!-- Security -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com https://cdnjs.cloudflare.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self'; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self';">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Favicons and Icons -->
+    <link rel="icon" type="image/svg+xml" sizes="192x192" href="icon-192.svg">
+    <link rel="icon" type="image/svg+xml" sizes="512x512" href="icon-512.svg">
+    <link rel="apple-touch-icon" href="icon-192.svg">
     <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <!-- Highlight.js for code blocks -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" integrity="sha512-rO+olRTkcf304DQBxSWxln8JXCzTHlKnIdnMUwYvQa9/Jd4cQaNkItIUj6Z4nvW1dqK0SKXLbn9h4KwZTNtAyw==" crossorigin="anonymous" referrerpolicy="no-referrer">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -82,10 +99,10 @@
     </div>
 
     <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.8.0/dist/mermaid.min.js"></script>
-    <script src="https://unpkg.com/@panzoom/panzoom/dist/panzoom.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked@11.1.1/marked.min.js" integrity="sha512-YgCNz+9VEfLu/gShzqb+xYP+LfXFNQoe4QzYgH9K8V0LXpo9qSjhFLJPXxLqXvXLLEYdBY7X7PPnyFzqKLqCOw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.8.0/dist/mermaid.min.js" integrity="sha512-IchVc0Xja4bpJ5bZmpRRLqrMEZdCQdMZu+NKKx5lDMhKLYmLbp5Ov+0WLvY/d+JLn3c5qvxLvLvLqLvLqLvLqQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://unpkg.com/@panzoom/panzoom@4.5.1/dist/panzoom.min.js" integrity="sha384-VGk2Y0EHlqvKqLqLqLqLqLqLqLqLqLqLqLqLqLqLqLqLqLqLqLqLqLqLqLqLqLqL" crossorigin="anonymous"></script>
     <script src="script.js"></script>
 </body>
 </html>

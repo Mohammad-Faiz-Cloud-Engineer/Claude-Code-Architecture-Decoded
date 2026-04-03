@@ -27,6 +27,9 @@ document.addEventListener('DOMContentLoaded', () => {
     initMobileMenu();
     initThemeDetector();
     initZoomModal();
+    initPWA();
+    preventPullToRefresh();
+    disableBrowserCache();
     
     // Handle initial route
     handleRoute();
@@ -34,6 +37,166 @@ document.addEventListener('DOMContentLoaded', () => {
     // Listen for hash changes
     window.addEventListener('hashchange', handleRoute);
 });
+
+// Disable browser caching - always fetch fresh content
+function disableBrowserCache() {
+    // Add cache-busting to all fetch requests
+    const originalFetch = window.fetch;
+    window.fetch = function(...args) {
+        let [resource, config] = args;
+        
+        // Add cache-busting parameter to URLs
+        if (typeof resource === 'string') {
+            const url = new URL(resource, window.location.href);
+            if (url.origin === window.location.origin) {
+                url.searchParams.set('_t', Date.now());
+                resource = url.toString();
+            }
+        }
+        
+        // Force no-cache headers
+        config = config || {};
+        config.cache = 'no-store';
+        config.headers = config.headers || {};
+        config.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate';
+        config.headers['Pragma'] = 'no-cache';
+        config.headers['Expires'] = '0';
+        
+        return originalFetch.call(this, resource, config);
+    };
+}
+
+// Prevent pull-to-refresh gesture on mobile
+function preventPullToRefresh() {
+    let startY = 0;
+    
+    document.addEventListener('touchstart', (e) => {
+        startY = e.touches[0].pageY;
+    }, { passive: true });
+    
+    document.addEventListener('touchmove', (e) => {
+        const y = e.touches[0].pageY;
+        
+        // Prevent pull-to-refresh if at top of page and pulling down
+        if (window.scrollY === 0 && y > startY) {
+            e.preventDefault();
+        }
+    }, { passive: false });
+    
+    // Additional prevention for overscroll
+    document.body.addEventListener('touchmove', (e) => {
+        if (e.touches.length > 1) return; // Allow pinch zoom
+        
+        const target = e.target;
+        const scrollable = target.closest('.sidebar, .main-content, .zoom-modal-body');
+        
+        if (!scrollable) {
+            e.preventDefault();
+        }
+    }, { passive: false });
+}
+
+// PWA Installation and Service Worker
+function initPWA() {
+    // Register service worker
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('./sw.js')
+                .then((registration) => {
+                    
+                    // Check for updates periodically
+                    setInterval(() => {
+                        registration.update();
+                    }, 60 * 60 * 1000); // Check every hour
+                    
+                    // Handle updates
+                    registration.addEventListener('updatefound', () => {
+                        const newWorker = registration.installing;
+                        newWorker.addEventListener('statechange', () => {
+                            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                showUpdateNotification();
+                            }
+                        });
+                    });
+                })
+                .catch(() => {});
+        });
+    }
+    
+    // Handle install prompt
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        showInstallButton(deferredPrompt);
+    });
+    
+    // Track if app was installed
+    window.addEventListener('appinstalled', () => {
+        deferredPrompt = null;
+        hideInstallButton();
+    });
+}
+
+function showInstallButton(deferredPrompt) {
+    const installBtn = document.createElement('button');
+    installBtn.id = 'pwa-install-btn';
+    installBtn.className = 'pwa-install-btn';
+    installBtn.innerHTML = `
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+        </svg>
+        Install App
+    `;
+    
+    installBtn.addEventListener('click', async () => {
+        if (!deferredPrompt) return;
+        
+        deferredPrompt.prompt();
+        await deferredPrompt.userChoice;
+        
+        deferredPrompt = null;
+        hideInstallButton();
+    });
+    
+    document.body.appendChild(installBtn);
+    
+    // Auto-hide after 10 seconds
+    setTimeout(() => {
+        installBtn.classList.add('fade-out');
+        setTimeout(() => hideInstallButton(), 300);
+    }, 10000);
+}
+
+function hideInstallButton() {
+    const btn = document.getElementById('pwa-install-btn');
+    if (btn) btn.remove();
+}
+
+function showUpdateNotification() {
+    const notification = document.createElement('div');
+    notification.className = 'pwa-update-notification';
+    notification.innerHTML = `
+        <div class="pwa-update-content">
+            <span>New version available!</span>
+            <button id="pwa-reload-btn" class="pwa-reload-btn">Reload</button>
+            <button id="pwa-dismiss-btn" class="pwa-dismiss-btn">×</button>
+        </div>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    document.getElementById('pwa-reload-btn').addEventListener('click', () => {
+        navigator.serviceWorker.controller.postMessage({ type: 'SKIP_WAITING' });
+        window.location.reload();
+    });
+    
+    document.getElementById('pwa-dismiss-btn').addEventListener('click', () => {
+        notification.remove();
+    });
+}
 
 function initSidebar() {
     const nav = document.getElementById('sidebar-nav');
@@ -210,19 +373,25 @@ async function loadContent(chapterId) {
     document.title = `${chapter.title} - Architecture Decoded`;
     
     try {
-        const response = await fetch(chapter.path);
+        // Force fresh fetch with cache-busting
+        const cacheBuster = `?_t=${Date.now()}`;
+        const response = await fetch(chapter.path + cacheBuster, {
+            cache: 'no-store',
+            headers: {
+                'Cache-Control': 'no-cache, no-store, must-revalidate',
+                'Pragma': 'no-cache',
+                'Expires': '0'
+            }
+        });
         if (!response.ok) {
             throw new Error(`HTTP Error ${response.status}: Failed to load file`);
         }
         const markdown = await response.text();
         
         // Parse markdown with marked.js
-        // SECURITY NOTE: sanitize is disabled because content is loaded from trusted local markdown files only.
-        // If content source changes to user-generated or external untrusted sources, implement DOMPurify sanitization.
         const html = marked.parse(markdown, {
             gfm: true,
-            breaks: true,
-            sanitize: false
+            breaks: true
         });
         
         contentDiv.innerHTML = html;

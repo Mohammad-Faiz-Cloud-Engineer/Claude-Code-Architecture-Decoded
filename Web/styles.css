@@ -55,6 +55,21 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     transition: background-color 0.3s ease, color 0.3s ease;
+    
+    /* Prevent pull-to-refresh on mobile */
+    overscroll-behavior-y: contain;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Prevent pull-to-refresh for PWA */
+html {
+    overscroll-behavior: none;
+}
+
+/* Additional touch handling for mobile */
+.app-container {
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
 }
 
 /* Layout */
@@ -745,4 +760,133 @@ html {
     max-height: 90vh;
     object-fit: contain;
     box-shadow: 0 4px 24px rgba(0,0,0,0.08); /* slight shadow for distinction */
+}
+
+/* PWA Install Button */
+.pwa-install-btn {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 20px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 16px rgba(192, 134, 112, 0.3);
+    z-index: 1000;
+    transition: all 0.3s ease;
+    animation: slideInUp 0.4s ease-out;
+}
+
+.pwa-install-btn:hover {
+    background: var(--accent-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(192, 134, 112, 0.4);
+}
+
+.pwa-install-btn.fade-out {
+    opacity: 0;
+    transform: translateY(10px);
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* PWA Update Notification */
+.pwa-update-notification {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    background: var(--bg-sidebar);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 16px 20px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    animation: slideInDown 0.4s ease-out;
+}
+
+@keyframes slideInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.pwa-update-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--text-primary);
+    font-size: 0.9rem;
+}
+
+.pwa-reload-btn {
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 6px 14px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.pwa-reload-btn:hover {
+    background: var(--accent-hover);
+}
+
+.pwa-dismiss-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-tertiary);
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0 4px;
+    transition: color 0.2s;
+}
+
+.pwa-dismiss-btn:hover {
+    color: var(--text-primary);
+}
+
+@media (max-width: 768px) {
+    .pwa-install-btn {
+        bottom: 16px;
+        right: 16px;
+        font-size: 0.9rem;
+        padding: 10px 16px;
+    }
+    
+    .pwa-update-notification {
+        top: 16px;
+        right: 16px;
+        left: 16px;
+        max-width: calc(100% - 32px);
+    }
+    
+    .pwa-update-content {
+        flex-wrap: wrap;
+        font-size: 0.85rem;
+    }
 }
