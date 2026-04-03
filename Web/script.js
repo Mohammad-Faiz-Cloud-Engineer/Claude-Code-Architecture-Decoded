@@ -1,28 +1,25 @@
 // Architecture Decoded - Content Structure
-// Detect if running on GitHub Pages and adjust paths accordingly
-const isGitHubPages = window.location.hostname.includes('github.io');
-const basePath = isGitHubPages ? '.' : '..';
-
+// All files are now in the Web directory for GitHub Pages deployment
 const structure = [
-    { id: 'readme', path: `${basePath}/README.md`, title: 'Introduction', group: 'Overview' },
-    { id: 'ch01-architecture', path: `${basePath}/book/ch01-architecture.md`, title: 'The Architecture of an AI Agent', group: 'Part I: Foundations' },
-    { id: 'ch02-bootstrap', path: `${basePath}/book/ch02-bootstrap.md`, title: 'Starting Fast — The Bootstrap Pipeline', group: 'Part I: Foundations' },
-    { id: 'ch03-state', path: `${basePath}/book/ch03-state.md`, title: 'State — The Two-Tier Architecture', group: 'Part I: Foundations' },
-    { id: 'ch04-api-layer', path: `${basePath}/book/ch04-api-layer.md`, title: 'Talking to Claude — The API Layer', group: 'Part I: Foundations' },
-    { id: 'ch05-agent-loop', path: `${basePath}/book/ch05-agent-loop.md`, title: 'The Agent Loop', group: 'Part II: The Core Loop' },
-    { id: 'ch06-tools', path: `${basePath}/book/ch06-tools.md`, title: 'Tools — From Definition to Execution', group: 'Part II: The Core Loop' },
-    { id: 'ch07-concurrency', path: `${basePath}/book/ch07-concurrency.md`, title: 'Concurrent Tool Execution', group: 'Part II: The Core Loop' },
-    { id: 'ch08-sub-agents', path: `${basePath}/book/ch08-sub-agents.md`, title: 'Spawning Sub-Agents', group: 'Part III: Multi-Agent Orchestration' },
-    { id: 'ch09-fork-agents', path: `${basePath}/book/ch09-fork-agents.md`, title: 'Fork Agents and the Prompt Cache', group: 'Part III: Multi-Agent Orchestration' },
-    { id: 'ch10-coordination', path: `${basePath}/book/ch10-coordination.md`, title: 'Tasks, Coordination, and Swarms', group: 'Part III: Multi-Agent Orchestration' },
-    { id: 'ch11-memory', path: `${basePath}/book/ch11-memory.md`, title: 'Memory — Learning Across Conversations', group: 'Part IV: Persistence and Intelligence' },
-    { id: 'ch12-extensibility', path: `${basePath}/book/ch12-extensibility.md`, title: 'Extensibility — Skills and Hooks', group: 'Part IV: Persistence and Intelligence' },
-    { id: 'ch13-terminal-ui', path: `${basePath}/book/ch13-terminal-ui.md`, title: 'The Terminal UI', group: 'Part V: The Interface' },
-    { id: 'ch14-input-interaction', path: `${basePath}/book/ch14-input-interaction.md`, title: 'Input and Interaction', group: 'Part V: The Interface' },
-    { id: 'ch15-mcp', path: `${basePath}/book/ch15-mcp.md`, title: 'MCP — The Universal Tool Protocol', group: 'Part VI: Connectivity' },
-    { id: 'ch16-remote', path: `${basePath}/book/ch16-remote.md`, title: 'Remote Control and Cloud Execution', group: 'Part VI: Connectivity' },
-    { id: 'ch17-performance', path: `${basePath}/book/ch17-performance.md`, title: 'Performance', group: 'Part VII: Performance Engineering' },
-    { id: 'ch18-epilogue', path: `${basePath}/book/ch18-epilogue.md`, title: 'Epilogue — What We Learned', group: 'Part VII: Performance Engineering' }
+    { id: 'readme', path: './README.md', title: 'Introduction', group: 'Overview' },
+    { id: 'ch01-architecture', path: './book/ch01-architecture.md', title: 'The Architecture of an AI Agent', group: 'Part I: Foundations' },
+    { id: 'ch02-bootstrap', path: './book/ch02-bootstrap.md', title: 'Starting Fast — The Bootstrap Pipeline', group: 'Part I: Foundations' },
+    { id: 'ch03-state', path: './book/ch03-state.md', title: 'State — The Two-Tier Architecture', group: 'Part I: Foundations' },
+    { id: 'ch04-api-layer', path: './book/ch04-api-layer.md', title: 'Talking to Claude — The API Layer', group: 'Part I: Foundations' },
+    { id: 'ch05-agent-loop', path: './book/ch05-agent-loop.md', title: 'The Agent Loop', group: 'Part II: The Core Loop' },
+    { id: 'ch06-tools', path: './book/ch06-tools.md', title: 'Tools — From Definition to Execution', group: 'Part II: The Core Loop' },
+    { id: 'ch07-concurrency', path: './book/ch07-concurrency.md', title: 'Concurrent Tool Execution', group: 'Part II: The Core Loop' },
+    { id: 'ch08-sub-agents', path: './book/ch08-sub-agents.md', title: 'Spawning Sub-Agents', group: 'Part III: Multi-Agent Orchestration' },
+    { id: 'ch09-fork-agents', path: './book/ch09-fork-agents.md', title: 'Fork Agents and the Prompt Cache', group: 'Part III: Multi-Agent Orchestration' },
+    { id: 'ch10-coordination', path: './book/ch10-coordination.md', title: 'Tasks, Coordination, and Swarms', group: 'Part III: Multi-Agent Orchestration' },
+    { id: 'ch11-memory', path: './book/ch11-memory.md', title: 'Memory — Learning Across Conversations', group: 'Part IV: Persistence and Intelligence' },
+    { id: 'ch12-extensibility', path: './book/ch12-extensibility.md', title: 'Extensibility — Skills and Hooks', group: 'Part IV: Persistence and Intelligence' },
+    { id: 'ch13-terminal-ui', path: './book/ch13-terminal-ui.md', title: 'The Terminal UI', group: 'Part V: The Interface' },
+    { id: 'ch14-input-interaction', path: './book/ch14-input-interaction.md', title: 'Input and Interaction', group: 'Part V: The Interface' },
+    { id: 'ch15-mcp', path: './book/ch15-mcp.md', title: 'MCP — The Universal Tool Protocol', group: 'Part VI: Connectivity' },
+    { id: 'ch16-remote', path: './book/ch16-remote.md', title: 'Remote Control and Cloud Execution', group: 'Part VI: Connectivity' },
+    { id: 'ch17-performance', path: './book/ch17-performance.md', title: 'Performance', group: 'Part VII: Performance Engineering' },
+    { id: 'ch18-epilogue', path: './book/ch18-epilogue.md', title: 'Epilogue — What We Learned', group: 'Part VII: Performance Engineering' }
 ];
 
 // Constants
@@ -50,15 +47,29 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('hashchange', handleRoute);
 });
 
-// Disable browser caching for markdown content
+// Disable browser caching - always fetch fresh content
 function disableBrowserCache() {
+    // Add cache-busting to all fetch requests
     const originalFetch = window.fetch;
-    window.fetch = function(resource, config) {
-        // Add cache-busting only to markdown files to ensure fresh content
-        if (typeof resource === 'string' && resource.endsWith('.md')) {
-            const separator = resource.includes('?') ? '&' : '?';
-            resource = `${resource}${separator}_cb=${Date.now()}`;
+    window.fetch = function(...args) {
+        let [resource, config] = args;
+        
+        // Add cache-busting parameter to URLs
+        if (typeof resource === 'string') {
+            const url = new URL(resource, window.location.href);
+            if (url.origin === window.location.origin) {
+                url.searchParams.set('_t', Date.now());
+                resource = url.toString();
+            }
         }
+        
+        // Force no-cache headers
+        config = config || {};
+        config.cache = 'no-store';
+        config.headers = config.headers || {};
+        config.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate';
+        config.headers['Pragma'] = 'no-cache';
+        config.headers['Expires'] = '0';
         
         return originalFetch.call(this, resource, config);
     };
@@ -101,6 +112,7 @@ function initPWA() {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('./sw.js')
                 .then((registration) => {
+                    
                     // Check for updates periodically
                     setInterval(() => {
                         registration.update();
@@ -109,21 +121,15 @@ function initPWA() {
                     // Handle updates
                     registration.addEventListener('updatefound', () => {
                         const newWorker = registration.installing;
-                        if (newWorker) {
-                            newWorker.addEventListener('statechange', () => {
-                                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                                    showUpdateNotification();
-                                }
-                            });
-                        }
+                        newWorker.addEventListener('statechange', () => {
+                            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                showUpdateNotification();
+                            }
+                        });
                     });
                 })
                 .catch((error) => {
-                    // Service worker registration failed - app will still work without it
-                    // Only log in development
-                    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-                        console.warn('Service Worker registration failed:', error);
-                    }
+                    console.error('Service Worker registration failed:', error);
                 });
         });
     }
@@ -308,32 +314,20 @@ function initZoomModal() {
     const zoomReset = document.getElementById('zoom-reset');
     
     if (typeof Panzoom !== 'undefined' && elem) {
-        try {
-            panzoomInstance = Panzoom(elem, {
-                maxScale: 5,
-                canvas: true
-            });
-            
-            elem.parentElement.addEventListener('wheel', panzoomInstance.zoomWithWheel);
-            
-            if (zoomIn) zoomIn.addEventListener('click', () => panzoomInstance.zoomIn());
-            if (zoomOut) zoomOut.addEventListener('click', () => panzoomInstance.zoomOut());
-            if (zoomReset) zoomReset.addEventListener('click', () => panzoomInstance.reset());
-            
-            if (closeBtn) closeBtn.addEventListener('click', closeZoomModal);
-            
-            elem.addEventListener('dblclick', () => {
-                if (panzoomInstance) {
-                    panzoomInstance.reset();
-                }
-            });
-        } catch (error) {
-            // Panzoom initialization failed - zoom modal will still work without pan/zoom
-            if (closeBtn) closeBtn.addEventListener('click', closeZoomModal);
-        }
-    } else if (closeBtn) {
-        // Panzoom not available - basic modal functionality only
+        panzoomInstance = Panzoom(elem, {
+            maxScale: 5,
+            canvas: true
+        });
+        
+        elem.parentElement.addEventListener('wheel', panzoomInstance.zoomWithWheel);
+        
+        zoomIn.addEventListener('click', () => panzoomInstance.zoomIn());
+        zoomOut.addEventListener('click', () => panzoomInstance.zoomOut());
+        zoomReset.addEventListener('click', () => panzoomInstance.reset());
+        
         closeBtn.addEventListener('click', closeZoomModal);
+        
+        elem.addEventListener('dblclick', () => panzoomInstance.reset());
     }
 }
 
@@ -433,12 +427,19 @@ async function loadContent(chapterId) {
     document.title = `${chapter.title} - Architecture Decoded`;
     
     try {
-        const response = await fetch(chapter.path);
-        
+        // Force fresh fetch with cache-busting
+        const cacheBuster = `?_t=${Date.now()}`;
+        const response = await fetch(chapter.path + cacheBuster, {
+            cache: 'no-store',
+            headers: {
+                'Cache-Control': 'no-cache, no-store, must-revalidate',
+                'Pragma': 'no-cache',
+                'Expires': '0'
+            }
+        });
         if (!response.ok) {
-            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            throw new Error(`HTTP Error ${response.status}: Failed to load file`);
         }
-        
         const markdown = await response.text();
         
         // Parse markdown with marked.js
@@ -460,34 +461,20 @@ async function loadContent(chapterId) {
         // Scroll to top
         window.scrollTo(0, 0);
 
-    } catch (error) {
-        const errorMessage = error.message || 'Unknown error occurred';
-        const isNetworkError = error.name === 'TypeError' || errorMessage.includes('Failed to fetch');
-        
+    } catch (e) {
         contentDiv.innerHTML = `
             <h2>Error Loading Content</h2>
             <p>Could not load <strong>${chapter.title}</strong>.</p>
-            ${isNetworkError ? `
             <blockquote style="border-left-color: #f44336;">
-                <p><strong>Network Error:</strong> Unable to fetch the content file.</p>
-                ${window.location.protocol === 'file:' ? `
-                <p><strong>Note:</strong> You are viewing this page using the file:// protocol. Modern browsers block loading external files for security reasons.</p>
-                <p>Please run a local web server from the project directory:</p>
+                <p><strong>Note:</strong> If you are opening this file locally directly in the browser (using file:// protocol), CORS policies will block loading external Markdown files.</p>
+                <p>Please run a local web server from the project directory. For example:</p>
                 <pre><code>python -m http.server 8000</code></pre>
                 <p>Then navigate to <a href="http://localhost:8000/Web/">http://localhost:8000/Web/</a></p>
-                ` : `
-                <p>Please check your internet connection and try again.</p>
-                <p>If the problem persists, the content file may be temporarily unavailable.</p>
-                `}
             </blockquote>
-            ` : `
-            <blockquote style="border-left-color: #f44336;">
-                <p><strong>Error details:</strong> ${errorMessage}</p>
-            </blockquote>
-            `}
-            <button onclick="location.reload()" style="margin-top: 1rem; padding: 0.5rem 1rem; background: var(--accent-color); color: white; border: none; border-radius: 4px; cursor: pointer;">Reload Page</button>
+            <p>Error details: <code>${e.message}</code></p>
         `;
         document.getElementById('page-nav').style.display = 'none';
+        console.error('Content Load Error:', e);
     }
 }
 
@@ -497,8 +484,10 @@ function processDomLinks(container) {
         if (!href) return;
         
         // Convert internal book links to hash routes
-        if (href.includes('./book/')) {
-            const newId = href.split('/').pop().replace('.md', '');
+        // Since book folder is now in Web/, links like ./book/ch01.md should work
+        if (href.includes('/book/') || href.startsWith('./book/')) {
+            const filename = href.split('/').pop();
+            const newId = filename.replace('.md', '');
             a.setAttribute('href', `#${newId}`);
         } else if (href.endsWith('.md')) {
             const newId = href.split('/').pop().replace('.md', '');
@@ -517,24 +506,8 @@ function processDomImages(container) {
         let src = img.getAttribute('src');
         if (!src) return;
         
-        if (!src.startsWith('http') && !src.startsWith('data:')) {
-            // Fix relative paths for GitHub Pages or local
-            if (isGitHubPages) {
-                // On GitHub Pages, files are in same directory level
-                if (src.startsWith('./')) {
-                    img.setAttribute('src', src);
-                } else if (!src.startsWith('/')) {
-                    img.setAttribute('src', `./${src}`);
-                }
-            } else {
-                // Local development - use relative paths from Web folder
-                if (src.startsWith('./')) {
-                    img.setAttribute('src', '../' + src.substring(2));
-                } else if (!src.startsWith('../')) {
-                    img.setAttribute('src', '../' + src);
-                }
-            }
-        }
+        // Images are already relative to the Web folder, no path adjustment needed
+        // Just ensure they work for both local and GitHub Pages
         
         // Wrap image and add fullscreen button
         const wrapper = document.createElement('div');
