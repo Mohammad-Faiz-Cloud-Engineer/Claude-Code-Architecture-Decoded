@@ -52,27 +52,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Disable browser caching - always fetch fresh content
 function disableBrowserCache() {
-    // Add cache-busting to all fetch requests
+    // Simple cache-busting for markdown files only
+    // Let browser cache static assets (CSS, JS, images) normally
     const originalFetch = window.fetch;
-    window.fetch = function(...args) {
-        let [resource, config] = args;
-        
-        // Add cache-busting parameter to URLs
-        if (typeof resource === 'string') {
-            const url = new URL(resource, window.location.href);
-            if (url.origin === window.location.origin) {
-                url.searchParams.set('_t', Date.now());
-                resource = url.toString();
-            }
+    window.fetch = function(resource, config) {
+        // Only add cache-busting to markdown files
+        if (typeof resource === 'string' && resource.endsWith('.md')) {
+            const separator = resource.includes('?') ? '&' : '?';
+            resource = `${resource}${separator}_=${Date.now()}`;
         }
-        
-        // Force no-cache headers
-        config = config || {};
-        config.cache = 'no-store';
-        config.headers = config.headers || {};
-        config.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate';
-        config.headers['Pragma'] = 'no-cache';
-        config.headers['Expires'] = '0';
         
         return originalFetch.call(this, resource, config);
     };
@@ -430,19 +418,13 @@ async function loadContent(chapterId) {
     document.title = `${chapter.title} - Architecture Decoded`;
     
     try {
-        // Force fresh fetch with cache-busting
-        const cacheBuster = `?_t=${Date.now()}`;
-        const response = await fetch(chapter.path + cacheBuster, {
-            cache: 'no-store',
-            headers: {
-                'Cache-Control': 'no-cache, no-store, must-revalidate',
-                'Pragma': 'no-cache',
-                'Expires': '0'
-            }
-        });
+        // Fetch markdown content (cache-busting handled by disableBrowserCache)
+        const response = await fetch(chapter.path);
+        
         if (!response.ok) {
             throw new Error(`HTTP Error ${response.status}: Failed to load file`);
         }
+        
         const markdown = await response.text();
         
         // Parse markdown with marked.js
