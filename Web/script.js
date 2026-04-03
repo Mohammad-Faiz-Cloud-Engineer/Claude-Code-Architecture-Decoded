@@ -1,7 +1,7 @@
 // Architecture Decoded - Content Structure
 // Detect if running on GitHub Pages and adjust paths accordingly
 const isGitHubPages = window.location.hostname.includes('github.io');
-const basePath = isGitHubPages ? '..' : '..';
+const basePath = isGitHubPages ? '.' : '..';
 
 const structure = [
     { id: 'readme', path: `${basePath}/README.md`, title: 'Introduction', group: 'Overview' },
@@ -510,14 +510,14 @@ function processDomImages(container) {
         if (!src.startsWith('http') && !src.startsWith('data:')) {
             // Fix relative paths for GitHub Pages or local
             if (isGitHubPages) {
-                // On GitHub Pages, adjust paths to include repo name
+                // On GitHub Pages, files are in same directory level
                 if (src.startsWith('./')) {
-                    img.setAttribute('src', `${basePath}/${src.substring(2)}`);
+                    img.setAttribute('src', src);
                 } else if (!src.startsWith('/')) {
-                    img.setAttribute('src', `${basePath}/${src}`);
+                    img.setAttribute('src', `./${src}`);
                 }
             } else {
-                // Local development - use relative paths
+                // Local development - use relative paths from Web folder
                 if (src.startsWith('./')) {
                     img.setAttribute('src', '../' + src.substring(2));
                 } else if (!src.startsWith('../')) {
