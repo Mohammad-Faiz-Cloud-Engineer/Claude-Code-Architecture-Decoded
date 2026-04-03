@@ -89,7 +89,7 @@ function toggleSidebar() {
 
 // Watch for system theme changes specifically for mermaid re-renders if necessary
 function initThemeDetector() {
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
         // Just reload current view to re-render mermaid with correct theme
         handleRoute();
     });
@@ -139,7 +139,12 @@ function openZoomModal(elementToClone) {
     document.body.style.overflow = 'hidden';
     
     if (panzoomInstance) {
-        setTimeout(() => panzoomInstance.reset(), 10);
+        setTimeout(() => {
+            // Check if modal is still open and panzoom instance exists
+            if (panzoomInstance && !modal.classList.contains('hidden')) {
+                panzoomInstance.reset();
+            }
+        }, 10);
     }
 }
 
@@ -214,7 +219,8 @@ async function loadContent(chapterId) {
         // Parse markdown with marked.js
         const html = marked.parse(markdown, {
             gfm: true,
-            breaks: true
+            breaks: true,
+            sanitize: false // Note: marked v4+ removed sanitize, using DOMPurify would be better for untrusted content
         });
         
         contentDiv.innerHTML = html;
@@ -345,14 +351,25 @@ async function processCodeBlocks(container) {
                 };
                 el.appendChild(btn);
             });
-        } catch (e) {
-            console.error('Mermaid render error:', e);
-            // Show raw mermaid code if render fails
+        } catch (err) {
+            console.error('Mermaid render error:', err);
+            // Show raw mermaid code with error message if render fails
             document.querySelectorAll('.mermaid').forEach(el => {
                 if (!el.querySelector('svg')) {
+                    const errorDiv = document.createElement('div');
+                    errorDiv.style.padding = '1em';
+                    errorDiv.style.backgroundColor = 'rgba(244, 67, 54, 0.1)';
+                    errorDiv.style.borderLeft = '3px solid #f44336';
+                    errorDiv.style.marginBottom = '1em';
+                    errorDiv.innerHTML = '<strong>Mermaid Diagram Error:</strong> Failed to render diagram. Raw code shown below.';
+                    el.parentNode.insertBefore(errorDiv, el);
+                    
                     el.style.whiteSpace = 'pre';
                     el.style.fontFamily = 'monospace';
                     el.style.overflowX = 'auto';
+                    el.style.padding = '1em';
+                    el.style.backgroundColor = 'var(--bg-code)';
+                    el.style.borderRadius = '4px';
                 }
             });
         }
