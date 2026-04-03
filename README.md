@@ -143,9 +143,9 @@ This project exists purely for educational purposes — to help engineers unders
 
 ## Getting Started
 
-1. **Browse online** — Open `Web/index.html` in your browser to read the interactive version
+1. **Browse online** — Visit the live website at [https://mohammad-faiz-cloud-engineer.github.io/Claude-Code-Architecture-Decoded/](https://mohammad-faiz-cloud-engineer.github.io/Claude-Code-Architecture-Decoded/)
 2. **Read on GitHub** — Navigate to the [book/](./book/) folder to read chapters as markdown
-3. **Clone locally** — `git clone` this repository to read offline
+3. **Clone locally** — `git clone` this repository to read offline with `Web/index.html`
 
 ### Project Structure
 
