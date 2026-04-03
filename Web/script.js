@@ -217,10 +217,12 @@ async function loadContent(chapterId) {
         const markdown = await response.text();
         
         // Parse markdown with marked.js
+        // SECURITY NOTE: sanitize is disabled because content is loaded from trusted local markdown files only.
+        // If content source changes to user-generated or external untrusted sources, implement DOMPurify sanitization.
         const html = marked.parse(markdown, {
             gfm: true,
             breaks: true,
-            sanitize: false // Note: marked v4+ removed sanitize, using DOMPurify would be better for untrusted content
+            sanitize: false
         });
         
         contentDiv.innerHTML = html;
