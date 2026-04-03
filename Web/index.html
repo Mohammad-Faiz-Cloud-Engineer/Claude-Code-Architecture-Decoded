@@ -12,14 +12,14 @@
     <title>Claude Code Architecture Decoded</title>
     
     <!-- Security -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https:; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https:; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self';">
+    <!-- Note: 'unsafe-inline' kept for style-src only due to dynamic styles. Script inline removed for security. -->
     
     <!-- PWA Manifest -->
     <link rel="manifest" href="manifest.json">
     
     <!-- Favicons and Icons -->
-    <link rel="icon" type="image/svg+xml" sizes="192x192" href="icon-192.svg">
-    <link rel="icon" type="image/svg+xml" sizes="512x512" href="icon-512.svg">
+    <link rel="icon" type="image/svg+xml" href="icon-192.svg">
     <link rel="apple-touch-icon" href="icon-192.svg">
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
