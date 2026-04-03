@@ -380,6 +380,44 @@ html {
     overflow-x: auto;
     margin: 2em 0;
     box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+    position: relative;
+}
+
+/* Copy button for code blocks */
+.copy-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    padding: 6px 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+    opacity: 0;
+    transition: all 0.2s;
+}
+
+.copy-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: var(--text-primary);
+}
+
+.copy-btn.copied {
+    color: #4caf50;
+}
+
+pre:hover .copy-btn {
+    opacity: 1;
+}
+
+@media (max-width: 768px) {
+    .copy-btn {
+        opacity: 1;
+    }
 }
 
 .content-wrapper pre code {
