@@ -2,7 +2,7 @@
   "name": "Architecture Decoded - Claude Code Deep Dive",
   "short_name": "Architecture Decoded",
   "description": "Deep dive into Claude Code: Patterns, internals & design principles of Anthropic's AI coding agent",
-  "start_url": "./index.html",
+  "start_url": "./",
   "display": "standalone",
   "background_color": "#FFFFFF",
   "theme_color": "#C08670",
