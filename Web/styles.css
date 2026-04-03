@@ -8,7 +8,7 @@
     /* Light Theme - Anthropic Documentation Style */
     --bg-main: #FFFFFF;
     --bg-sidebar: #F5F4EF;
-    --bg-code: #1E1E1E;
+    --bg-code: #F6F8FA;
     --text-primary: #1A1A1A;
     --text-secondary: #5E5E5E;
     --text-tertiary: #A0A0A0;
@@ -25,7 +25,7 @@
     :root {
         --bg-main: #141414;
         --bg-sidebar: #1A1A1A;
-        --bg-code: #111111;
+        --bg-code: #0d1117;
         --text-primary: #EDEDED;
         --text-secondary: #A0A0A0;
         --text-tertiary: #6E6E6E;
@@ -385,12 +385,23 @@ html {
 .content-wrapper pre code {
     background-color: transparent;
     padding: 0;
-    color: #cecece; 
     font-size: 0.85rem;
     line-height: 1.5;
     border-radius: 0;
     white-space: pre;
     word-break: normal;
+}
+
+@media (prefers-color-scheme: dark) {
+    .content-wrapper pre code {
+        color: #e6edf3;
+    }
+}
+
+@media (prefers-color-scheme: light) {
+    .content-wrapper pre code {
+        color: #24292f;
+    }
 }
 
 /* For images and diagrams, ensuring perfect sizing */
