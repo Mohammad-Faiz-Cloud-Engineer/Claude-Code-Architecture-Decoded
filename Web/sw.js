@@ -35,6 +35,7 @@ self.addEventListener('fetch', (event) => {
             // Return fresh response directly, no caching
             return networkResponse;
         }).catch(() => {
+            // Network request failed - handle offline state
             
             // Return offline page for navigation requests
             if (request.mode === 'navigate') {
