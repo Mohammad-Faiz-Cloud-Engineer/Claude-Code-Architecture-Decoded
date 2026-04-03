@@ -21,6 +21,14 @@ const structure = [
     { id: 'ch18-epilogue', path: '../book/ch18-epilogue.md', title: 'Epilogue — What We Learned', group: 'Part VII: Performance Engineering' }
 ];
 
+// Constants
+const TIMING = {
+    SW_UPDATE_CHECK_INTERVAL: 60 * 60 * 1000, // 1 hour
+    INSTALL_BUTTON_AUTO_HIDE: 10000, // 10 seconds
+    COPY_SUCCESS_DISPLAY: 2000, // 2 seconds
+    PANZOOM_RESET_DELAY: 10 // 10ms
+};
+
 // Initialize application
 document.addEventListener('DOMContentLoaded', () => {
     initSidebar();
@@ -107,7 +115,7 @@ function initPWA() {
                     // Check for updates periodically
                     setInterval(() => {
                         registration.update();
-                    }, 60 * 60 * 1000); // Check every hour
+                    }, TIMING.SW_UPDATE_CHECK_INTERVAL);
                     
                     // Handle updates
                     registration.addEventListener('updatefound', () => {
@@ -119,7 +127,9 @@ function initPWA() {
                         });
                     });
                 })
-                .catch(() => {});
+                .catch((error) => {
+                    console.error('Service Worker registration failed:', error);
+                });
         });
     }
     
@@ -142,14 +152,34 @@ function showInstallButton(deferredPrompt) {
     const installBtn = document.createElement('button');
     installBtn.id = 'pwa-install-btn';
     installBtn.className = 'pwa-install-btn';
-    installBtn.innerHTML = `
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-            <polyline points="7 10 12 15 17 10"></polyline>
-            <line x1="12" y1="15" x2="12" y2="3"></line>
-        </svg>
-        Install App
-    `;
+    
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('width', '20');
+    svg.setAttribute('height', '20');
+    svg.setAttribute('viewBox', '0 0 24 24');
+    svg.setAttribute('fill', 'none');
+    svg.setAttribute('stroke', 'currentColor');
+    svg.setAttribute('stroke-width', '2');
+    
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('d', 'M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4');
+    svg.appendChild(path);
+    
+    const polyline = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+    polyline.setAttribute('points', '7 10 12 15 17 10');
+    svg.appendChild(polyline);
+    
+    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    line.setAttribute('x1', '12');
+    line.setAttribute('y1', '15');
+    line.setAttribute('x2', '12');
+    line.setAttribute('y2', '3');
+    svg.appendChild(line);
+    
+    installBtn.appendChild(svg);
+    
+    const text = document.createTextNode(' Install App');
+    installBtn.appendChild(text);
     
     installBtn.addEventListener('click', async () => {
         if (!deferredPrompt) return;
@@ -163,11 +193,11 @@ function showInstallButton(deferredPrompt) {
     
     document.body.appendChild(installBtn);
     
-    // Auto-hide after 10 seconds
+    // Auto-hide after timeout
     setTimeout(() => {
         installBtn.classList.add('fade-out');
         setTimeout(() => hideInstallButton(), 300);
-    }, 10000);
+    }, TIMING.INSTALL_BUTTON_AUTO_HIDE);
 }
 
 function hideInstallButton() {
@@ -178,22 +208,37 @@ function hideInstallButton() {
 function showUpdateNotification() {
     const notification = document.createElement('div');
     notification.className = 'pwa-update-notification';
-    notification.innerHTML = `
-        <div class="pwa-update-content">
-            <span>New version available!</span>
-            <button id="pwa-reload-btn" class="pwa-reload-btn">Reload</button>
-            <button id="pwa-dismiss-btn" class="pwa-dismiss-btn">×</button>
-        </div>
-    `;
     
+    const contentDiv = document.createElement('div');
+    contentDiv.className = 'pwa-update-content';
+    
+    const message = document.createElement('span');
+    message.textContent = 'New version available!';
+    contentDiv.appendChild(message);
+    
+    const reloadBtn = document.createElement('button');
+    reloadBtn.id = 'pwa-reload-btn';
+    reloadBtn.className = 'pwa-reload-btn';
+    reloadBtn.textContent = 'Reload';
+    contentDiv.appendChild(reloadBtn);
+    
+    const dismissBtn = document.createElement('button');
+    dismissBtn.id = 'pwa-dismiss-btn';
+    dismissBtn.className = 'pwa-dismiss-btn';
+    dismissBtn.textContent = '×';
+    contentDiv.appendChild(dismissBtn);
+    
+    notification.appendChild(contentDiv);
     document.body.appendChild(notification);
     
-    document.getElementById('pwa-reload-btn').addEventListener('click', () => {
-        navigator.serviceWorker.controller.postMessage({ type: 'SKIP_WAITING' });
+    reloadBtn.addEventListener('click', () => {
+        if (navigator.serviceWorker.controller) {
+            navigator.serviceWorker.controller.postMessage({ type: 'SKIP_WAITING' });
+        }
         window.location.reload();
     });
     
-    document.getElementById('pwa-dismiss-btn').addEventListener('click', () => {
+    dismissBtn.addEventListener('click', () => {
         notification.remove();
     });
 }
@@ -289,7 +334,12 @@ function openZoomModal(elementToClone) {
     const modal = document.getElementById('zoom-modal');
     const content = document.getElementById('zoom-content');
     
-    content.innerHTML = '';
+    if (!elementToClone) {
+        console.error('No element provided to zoom modal');
+        return;
+    }
+    
+    content.textContent = '';
     const clone = elementToClone.cloneNode(true);
     
     if (clone.tagName.toLowerCase() === 'svg') {
@@ -303,11 +353,14 @@ function openZoomModal(elementToClone) {
     
     if (panzoomInstance) {
         setTimeout(() => {
-            // Check if modal is still open and panzoom instance exists
             if (panzoomInstance && !modal.classList.contains('hidden')) {
-                panzoomInstance.reset();
+                try {
+                    panzoomInstance.reset();
+                } catch (error) {
+                    console.error('Panzoom reset failed:', error);
+                }
             }
-        }, 10);
+        }, TIMING.PANZOOM_RESET_DELAY);
     }
 }
 
@@ -467,7 +520,22 @@ function processDomImages(container) {
         
         const btn = document.createElement('button');
         btn.className = 'fullscreen-btn';
-        btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg> Expand`;
+        btn.setAttribute('aria-label', 'Expand image');
+        
+        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        svg.setAttribute('width', '14');
+        svg.setAttribute('height', '14');
+        svg.setAttribute('viewBox', '0 0 24 24');
+        svg.setAttribute('fill', 'none');
+        svg.setAttribute('stroke', 'currentColor');
+        svg.setAttribute('stroke-width', '2');
+        
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute('d', 'M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3');
+        svg.appendChild(path);
+        
+        btn.appendChild(svg);
+        btn.appendChild(document.createTextNode(' Expand'));
         btn.onclick = () => openZoomModal(img);
         wrapper.appendChild(btn);
     });
@@ -475,7 +543,8 @@ function processDomImages(container) {
 
 async function processCodeBlocks(container) {
     // 1. Syntax Highlighting
-    container.querySelectorAll('pre code:not(.language-mermaid)').forEach(block => {
+    const codeBlocks = container.querySelectorAll('pre code:not(.language-mermaid)');
+    codeBlocks.forEach(block => {
         hljs.highlightElement(block);
         
         // Add copy button to code blocks
@@ -483,21 +552,70 @@ async function processCodeBlocks(container) {
         if (!pre.querySelector('.copy-btn')) {
             const copyBtn = document.createElement('button');
             copyBtn.className = 'copy-btn';
-            copyBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>';
             copyBtn.setAttribute('aria-label', 'Copy code');
+            
+            const createCopyIcon = () => {
+                const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                svg.setAttribute('width', '16');
+                svg.setAttribute('height', '16');
+                svg.setAttribute('viewBox', '0 0 24 24');
+                svg.setAttribute('fill', 'none');
+                svg.setAttribute('stroke', 'currentColor');
+                svg.setAttribute('stroke-width', '2');
+                
+                const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                rect.setAttribute('x', '9');
+                rect.setAttribute('y', '9');
+                rect.setAttribute('width', '13');
+                rect.setAttribute('height', '13');
+                rect.setAttribute('rx', '2');
+                rect.setAttribute('ry', '2');
+                svg.appendChild(rect);
+                
+                const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                path.setAttribute('d', 'M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1');
+                svg.appendChild(path);
+                
+                return svg;
+            };
+            
+            const createCheckIcon = () => {
+                const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                svg.setAttribute('width', '16');
+                svg.setAttribute('height', '16');
+                svg.setAttribute('viewBox', '0 0 24 24');
+                svg.setAttribute('fill', 'none');
+                svg.setAttribute('stroke', 'currentColor');
+                svg.setAttribute('stroke-width', '2');
+                
+                const polyline = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+                polyline.setAttribute('points', '20 6 9 17 4 12');
+                svg.appendChild(polyline);
+                
+                return svg;
+            };
+            
+            copyBtn.appendChild(createCopyIcon());
             
             copyBtn.addEventListener('click', async () => {
                 const code = block.textContent;
                 try {
                     await navigator.clipboard.writeText(code);
-                    copyBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+                    copyBtn.textContent = '';
+                    copyBtn.appendChild(createCheckIcon());
                     copyBtn.classList.add('copied');
                     setTimeout(() => {
-                        copyBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>';
+                        copyBtn.textContent = '';
+                        copyBtn.appendChild(createCopyIcon());
                         copyBtn.classList.remove('copied');
-                    }, 2000);
+                    }, TIMING.COPY_SUCCESS_DISPLAY);
                 } catch (err) {
-                    console.error('Failed to copy:', err);
+                    console.error('Failed to copy code:', err);
+                    copyBtn.textContent = '✗';
+                    setTimeout(() => {
+                        copyBtn.textContent = '';
+                        copyBtn.appendChild(createCopyIcon());
+                    }, TIMING.COPY_SUCCESS_DISPLAY);
                 }
             });
             
@@ -540,12 +658,31 @@ async function processCodeBlocks(container) {
             document.querySelectorAll('.mermaid').forEach(el => {
                 const btn = document.createElement('button');
                 btn.className = 'fullscreen-btn';
-                btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg> Expand`;
+                btn.setAttribute('aria-label', 'Expand diagram');
+                
+                const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                svg.setAttribute('width', '14');
+                svg.setAttribute('height', '14');
+                svg.setAttribute('viewBox', '0 0 24 24');
+                svg.setAttribute('fill', 'none');
+                svg.setAttribute('stroke', 'currentColor');
+                svg.setAttribute('stroke-width', '2');
+                
+                const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                path.setAttribute('d', 'M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3');
+                svg.appendChild(path);
+                
+                btn.appendChild(svg);
+                btn.appendChild(document.createTextNode(' Expand'));
                 
                 // Clicking expand extracts the SVG child
                 btn.onclick = () => {
                     const svg = el.querySelector('svg');
-                    if(svg) openZoomModal(svg);
+                    if (svg) {
+                        openZoomModal(svg);
+                    } else {
+                        console.error('No SVG found in mermaid diagram');
+                    }
                 };
                 el.appendChild(btn);
             });
