@@ -24,10 +24,10 @@ const structure = [
 
 // Constants
 const TIMING = {
-    SW_UPDATE_CHECK_INTERVAL: 60 * 60 * 1000, // 1 hour
-    INSTALL_BUTTON_AUTO_HIDE: 10000, // 10 seconds
-    COPY_SUCCESS_DISPLAY: 2000, // 2 seconds
-    PANZOOM_RESET_DELAY: 10 // 10ms
+    SW_UPDATE_CHECK_INTERVAL: 60 * 60 * 1000, // 1 hour - Balance between freshness and server load
+    INSTALL_BUTTON_AUTO_HIDE: 10000, // 10 seconds - Give users time to notice without being intrusive
+    COPY_SUCCESS_DISPLAY: 2000, // 2 seconds - Standard feedback duration for user actions
+    PANZOOM_RESET_DELAY: 10 // 10ms - Allow DOM to settle before panzoom reset
 };
 
 // Initialize application
@@ -71,7 +71,10 @@ function disableBrowserCache() {
         config.headers['Pragma'] = 'no-cache';
         config.headers['Expires'] = '0';
         
-        return originalFetch.call(this, resource, config);
+        return originalFetch.call(this, resource, config).catch(error => {
+            console.error('Fetch failed:', error);
+            throw error;
+        });
     };
 }
 
@@ -112,6 +115,7 @@ function initPWA() {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('./sw.js')
                 .then((registration) => {
+                    // Service worker registered successfully
                     
                     // Check for updates periodically
                     setInterval(() => {
@@ -129,7 +133,7 @@ function initPWA() {
                     });
                 })
                 .catch((error) => {
-                    console.error('Service Worker registration failed:', error);
+                    // Service worker registration failed - app will still work without PWA features
                 });
         });
     }
