@@ -1,21 +1,41 @@
-MIT License
+Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International
 
 Copyright (c) 2026 Mohammad Faiz
+Repository: https://github.com/Mohammad-Faiz-Cloud-Engineer/Claude-Code-Architecture-Decoded
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+This work is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+You are free to:
+- Share — copy and redistribute the material in any medium or format
+- Adapt — remix, transform, and build upon the material
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+Under the following terms:
+- Attribution — You must give appropriate credit, provide a link to the license, and indicate if changes were made.
+- NonCommercial — You may not use the material for commercial purposes.
+- ShareAlike — If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original.
+- No additional restrictions — You may not apply legal terms or technological measures that legally restrict others from doing anything the license permits.
+
+To view a copy of this license, visit:
+https://creativecommons.org/licenses/by-nc-sa/4.0/
+
+---
+
+DISCLAIMER AND ADDITIONAL TERMS
+
+This repository contains educational analysis and documentation of architectural patterns observed in Claude Code, a product of Anthropic PBC. This work is an independent analysis and is not affiliated with, endorsed by, or sponsored by Anthropic.
+
+IMPORTANT NOTICES:
+
+1. NO SOURCE CODE: This repository does not contain any proprietary source code from Claude Code. All code examples are original pseudocode written to illustrate architectural patterns and design principles.
+
+2. EDUCATIONAL PURPOSE: This work exists purely for educational purposes to help engineers understand design patterns behind production AI coding agents.
+
+3. TRADEMARKS: "Claude," "Claude Code," and "Anthropic" are trademarks of Anthropic PBC. All trademarks and registered trademarks are the property of their respective owners.
+
+4. NO WARRANTY: This work is provided "as is" without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose and noninfringement.
+
+5. INTELLECTUAL PROPERTY: All intellectual property rights in Claude Code remain the exclusive property of Anthropic PBC. This license applies only to the original educational content and analysis contained in this repository.
+
+6. RESPECT FOR ORIGINAL WORK: Users of this educational material must respect Anthropic's intellectual property rights and should not use this material to create competing products or services.
+
+If you have concerns about this educational work, please contact the repository maintainers.
