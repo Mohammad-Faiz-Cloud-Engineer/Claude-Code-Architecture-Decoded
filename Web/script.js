@@ -1,7 +1,7 @@
 // Architecture Decoded - Content Structure
 // Detect if running on GitHub Pages and adjust paths accordingly
 const isGitHubPages = window.location.hostname.includes('github.io');
-const basePath = isGitHubPages ? '/Claude-Code-Architecture-Decoded' : '..';
+const basePath = isGitHubPages ? '..' : '..';
 
 const structure = [
     { id: 'readme', path: `${basePath}/README.md`, title: 'Introduction', group: 'Overview' },
