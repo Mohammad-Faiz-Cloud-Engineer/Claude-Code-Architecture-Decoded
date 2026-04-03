@@ -143,9 +143,27 @@ This project exists purely for educational purposes — to help engineers unders
 
 ## Getting Started
 
-1. **Browse online** — Open `index.html` in your browser to read the interactive version
+1. **Browse online** — Open `Web/index.html` in your browser to read the interactive version
 2. **Read on GitHub** — Navigate to the [book/](./book/) folder to read chapters as markdown
 3. **Clone locally** — `git clone` this repository to read offline
+
+### Project Structure
+
+```
+.
+├── Web/              # Interactive website
+│   ├── index.html    # Main page
+│   ├── styles.css    # Styling
+│   └── script.js     # Chapter loading logic
+├── book/             # Markdown chapters
+│   ├── ch01-architecture.md
+│   ├── ch02-bootstrap.md
+│   └── ...
+├── LICENSE           # CC BY-NC-SA 4.0 license
+├── NOTICE            # Legal notices
+├── SETUP_GUIDE.md    # Detailed setup instructions
+└── README.md         # This file
+```
 
 ---
 
