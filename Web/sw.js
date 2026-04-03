@@ -18,7 +18,7 @@ self.addEventListener('activate', (event) => {
     );
 });
 
-// Fetch event - Network First, NO CACHING
+// Fetch event - Network First with normal caching
 self.addEventListener('fetch', (event) => {
     const { request } = event;
     
@@ -27,14 +27,13 @@ self.addEventListener('fetch', (event) => {
         return;
     }
     
-    // Network First strategy - always fetch from network, no cache fallback
+    // Network First strategy - fetch from network, with normal browser caching
     event.respondWith(
-        fetch(request, {
-            cache: 'no-store' // Force fresh fetch, bypass browser cache
-        }).then((networkResponse) => {
-            // Return fresh response directly, no caching
+        fetch(request).then((networkResponse) => {
+            // Return response with normal caching behavior
             return networkResponse;
-        }).catch(() => {
+        }).catch((error) => {
+            console.error('Fetch failed:', error);
             
             // Return offline page for navigation requests
             if (request.mode === 'navigate') {
@@ -86,19 +85,14 @@ self.addEventListener('fetch', (event) => {
                     </html>`,
                     { 
                         headers: { 
-                            'Content-Type': 'text/html',
-                            'Cache-Control': 'no-store'
+                            'Content-Type': 'text/html'
                         } 
                     }
                 );
             }
             
-            // For other requests, return error
-            return new Response('Network error', {
-                status: 408,
-                statusText: 'Network request failed',
-                headers: { 'Cache-Control': 'no-store' }
-            });
+            // For other requests, let the error propagate
+            throw error;
         })
     );
 });
