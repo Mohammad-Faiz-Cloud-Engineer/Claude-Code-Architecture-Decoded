@@ -50,16 +50,14 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('hashchange', handleRoute);
 });
 
-// Disable browser caching - always fetch fresh content
+// Disable browser caching for markdown content
 function disableBrowserCache() {
-    // Simple cache-busting for markdown files only
-    // Let browser cache static assets (CSS, JS, images) normally
     const originalFetch = window.fetch;
     window.fetch = function(resource, config) {
-        // Only add cache-busting to markdown files
+        // Add cache-busting only to markdown files to ensure fresh content
         if (typeof resource === 'string' && resource.endsWith('.md')) {
             const separator = resource.includes('?') ? '&' : '?';
-            resource = `${resource}${separator}_=${Date.now()}`;
+            resource = `${resource}${separator}_cb=${Date.now()}`;
         }
         
         return originalFetch.call(this, resource, config);
@@ -103,7 +101,6 @@ function initPWA() {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('./sw.js')
                 .then((registration) => {
-                    
                     // Check for updates periodically
                     setInterval(() => {
                         registration.update();
@@ -112,15 +109,21 @@ function initPWA() {
                     // Handle updates
                     registration.addEventListener('updatefound', () => {
                         const newWorker = registration.installing;
-                        newWorker.addEventListener('statechange', () => {
-                            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                                showUpdateNotification();
-                            }
-                        });
+                        if (newWorker) {
+                            newWorker.addEventListener('statechange', () => {
+                                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                    showUpdateNotification();
+                                }
+                            });
+                        }
                     });
                 })
                 .catch((error) => {
-                    console.error('Service Worker registration failed:', error);
+                    // Service worker registration failed - app will still work without it
+                    // Only log in development
+                    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+                        console.warn('Service Worker registration failed:', error);
+                    }
                 });
         });
     }
@@ -305,20 +308,32 @@ function initZoomModal() {
     const zoomReset = document.getElementById('zoom-reset');
     
     if (typeof Panzoom !== 'undefined' && elem) {
-        panzoomInstance = Panzoom(elem, {
-            maxScale: 5,
-            canvas: true
-        });
-        
-        elem.parentElement.addEventListener('wheel', panzoomInstance.zoomWithWheel);
-        
-        zoomIn.addEventListener('click', () => panzoomInstance.zoomIn());
-        zoomOut.addEventListener('click', () => panzoomInstance.zoomOut());
-        zoomReset.addEventListener('click', () => panzoomInstance.reset());
-        
+        try {
+            panzoomInstance = Panzoom(elem, {
+                maxScale: 5,
+                canvas: true
+            });
+            
+            elem.parentElement.addEventListener('wheel', panzoomInstance.zoomWithWheel);
+            
+            if (zoomIn) zoomIn.addEventListener('click', () => panzoomInstance.zoomIn());
+            if (zoomOut) zoomOut.addEventListener('click', () => panzoomInstance.zoomOut());
+            if (zoomReset) zoomReset.addEventListener('click', () => panzoomInstance.reset());
+            
+            if (closeBtn) closeBtn.addEventListener('click', closeZoomModal);
+            
+            elem.addEventListener('dblclick', () => {
+                if (panzoomInstance) {
+                    panzoomInstance.reset();
+                }
+            });
+        } catch (error) {
+            // Panzoom initialization failed - zoom modal will still work without pan/zoom
+            if (closeBtn) closeBtn.addEventListener('click', closeZoomModal);
+        }
+    } else if (closeBtn) {
+        // Panzoom not available - basic modal functionality only
         closeBtn.addEventListener('click', closeZoomModal);
-        
-        elem.addEventListener('dblclick', () => panzoomInstance.reset());
     }
 }
 
@@ -418,11 +433,10 @@ async function loadContent(chapterId) {
     document.title = `${chapter.title} - Architecture Decoded`;
     
     try {
-        // Fetch markdown content (cache-busting handled by disableBrowserCache)
         const response = await fetch(chapter.path);
         
         if (!response.ok) {
-            throw new Error(`HTTP Error ${response.status}: Failed to load file`);
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }
         
         const markdown = await response.text();
@@ -446,20 +460,34 @@ async function loadContent(chapterId) {
         // Scroll to top
         window.scrollTo(0, 0);
 
-    } catch (e) {
+    } catch (error) {
+        const errorMessage = error.message || 'Unknown error occurred';
+        const isNetworkError = error.name === 'TypeError' || errorMessage.includes('Failed to fetch');
+        
         contentDiv.innerHTML = `
             <h2>Error Loading Content</h2>
             <p>Could not load <strong>${chapter.title}</strong>.</p>
+            ${isNetworkError ? `
             <blockquote style="border-left-color: #f44336;">
-                <p><strong>Note:</strong> If you are opening this file locally directly in the browser (using file:// protocol), CORS policies will block loading external Markdown files.</p>
-                <p>Please run a local web server from the project directory. For example:</p>
+                <p><strong>Network Error:</strong> Unable to fetch the content file.</p>
+                ${window.location.protocol === 'file:' ? `
+                <p><strong>Note:</strong> You are viewing this page using the file:// protocol. Modern browsers block loading external files for security reasons.</p>
+                <p>Please run a local web server from the project directory:</p>
                 <pre><code>python -m http.server 8000</code></pre>
                 <p>Then navigate to <a href="http://localhost:8000/Web/">http://localhost:8000/Web/</a></p>
+                ` : `
+                <p>Please check your internet connection and try again.</p>
+                <p>If the problem persists, the content file may be temporarily unavailable.</p>
+                `}
             </blockquote>
-            <p>Error details: <code>${e.message}</code></p>
+            ` : `
+            <blockquote style="border-left-color: #f44336;">
+                <p><strong>Error details:</strong> ${errorMessage}</p>
+            </blockquote>
+            `}
+            <button onclick="location.reload()" style="margin-top: 1rem; padding: 0.5rem 1rem; background: var(--accent-color); color: white; border: none; border-radius: 4px; cursor: pointer;">Reload Page</button>
         `;
         document.getElementById('page-nav').style.display = 'none';
-        console.error('Content Load Error:', e);
     }
 }
 
