@@ -488,15 +488,28 @@ function processDomLinks(container) {
         if (!href) return;
         
         // Convert internal book links to hash routes
-        // Since book folder is now in Web/, links like ./book/ch01.md should work
-        if (href.includes('/book/') || href.startsWith('./book/')) {
+        // Handle both relative paths (./book/) and absolute paths (/book/)
+        if (href.includes('/book/') || href.startsWith('./book/') || href.startsWith('book/')) {
             const filename = href.split('/').pop();
             const newId = filename.replace('.md', '');
-            a.setAttribute('href', `#${newId}`);
+            // Verify the ID exists in structure before converting
+            if (structure.find(s => s.id === newId)) {
+                a.setAttribute('href', `#${newId}`);
+                // Prevent default navigation
+                a.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    window.location.hash = newId;
+                });
+            }
         } else if (href.endsWith('.md')) {
             const newId = href.split('/').pop().replace('.md', '');
             if (structure.find(s => s.id === newId)) {
                 a.setAttribute('href', `#${newId}`);
+                // Prevent default navigation
+                a.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    window.location.hash = newId;
+                });
             }
         } else if (href.startsWith('http')) {
             a.setAttribute('target', '_blank');
