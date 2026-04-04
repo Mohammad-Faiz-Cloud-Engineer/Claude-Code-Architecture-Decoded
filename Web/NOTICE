@@ -1,0 +1,61 @@
+NOTICE
+
+Agent Architecture Decoded
+Educational Analysis of Claude Code Architecture
+
+Author: Mohammad Faiz
+Repository: https://github.com/Mohammad-Faiz-Cloud-Engineer/Claude-Code-Architecture-Decoded
+
+This repository contains educational analysis and documentation of architectural 
+patterns observed in Claude Code, a product developed by Anthropic PBC.
+
+ATTRIBUTION AND TRADEMARKS
+--------------------------
+Claude Code is a product of Anthropic PBC.
+"Claude," "Claude Code," and "Anthropic" are trademarks of Anthropic PBC.
+All trademarks and registered trademarks are the property of their respective owners.
+
+NATURE OF THIS WORK
+--------------------
+This is an independent educational analysis created by studying publicly available 
+source maps that were included in npm package distributions of Claude Code. This 
+work is not affiliated with, endorsed by, or sponsored by Anthropic PBC.
+
+NO PROPRIETARY CODE
+-------------------
+This repository does NOT contain any proprietary source code from Claude Code.
+All code examples presented are:
+- Original pseudocode written for educational illustration
+- Using different variable names and structures
+- Designed to demonstrate architectural patterns and principles
+- Not suitable for reproduction or redistribution of the original software
+
+EDUCATIONAL PURPOSE
+-------------------
+The sole purpose of this work is educational: to help software engineers understand 
+design patterns, architectural decisions, and engineering trade-offs in production 
+AI agent systems.
+
+INTELLECTUAL PROPERTY RIGHTS
+-----------------------------
+All intellectual property rights in Claude Code, including but not limited to 
+source code, algorithms, prompts, and implementation details, remain the exclusive 
+property of Anthropic PBC.
+
+This educational analysis is protected under fair use principles for educational 
+and commentary purposes.
+
+RESPECT FOR ORIGINAL WORK
+--------------------------
+Users of this educational material must:
+- Respect Anthropic's intellectual property rights
+- Not use this material to create competing products or services
+- Not claim affiliation with or endorsement by Anthropic
+- Provide proper attribution when referencing this analysis
+
+CONTACT
+-------
+For questions or concerns about this educational work, please open an issue in 
+the repository.
+
+For questions about Claude Code itself, please contact Anthropic PBC directly.
